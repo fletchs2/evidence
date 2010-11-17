@@ -40,30 +40,30 @@ lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
 #' @param hi Upper parameter bound to likelihood calculation (defaults to 1).
 #' @param p.fail Calculates probability of failing to find strong evidence 
 #'      supporting trueprob.
+#' @keywords likelihood
+#' @export
 ebinom <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, p.fail=F) {
     
     z <- seq(lo+0.001, hi-0.001, by=1/points)
     x <- 0:n
     
-    mislead <- NULL
-    fail <- NULL
+    mislead <- numeric(length(z))
+    if (p.fail==T) {
+        fail <- numeric(length(z))
+    } else fail <- NULL
     
     for (i in 1:length(z)) {
         
         x.mis <- x[dbinom(x, n, z[i]) >= k*dbinom(x, n, trueprob)]
         
-        mislead.i <- ifelse(length(x.mis)==0, 0, sum(dbinom(x.mis, n, trueprob)))
-        
-        mislead <- c(mislead, mislead.i)
+        mislead[i] <- ifelse(length(x.mis)==0, 0, sum(dbinom(x.mis, n, trueprob)))
         
         # Probability of failing to find strong evidence supporting trueprob
         if (p.fail==T) {
             
             x.fail <- x[dbinom(x, n, z[i]) > dbinom(x, n, trueprob)/k]
             
-            fail.i <- ifelse(length(x.fail)==0, 0, sum(dbinom(x.fail, n, trueprob)))
-            
-            fail <- c(fail, fail.i)
+            fail[i] <- ifelse(length(x.fail)==0, 0, sum(dbinom(x.fail, n, trueprob)))
         }
     }
     

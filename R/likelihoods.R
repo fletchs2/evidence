@@ -19,7 +19,7 @@ interval.likelihood <- function(x, interval) {
 #' @param y NA Not used
 plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), xlabel="", ylabel="Likelihood", main="") {
     # Create data frame
-    dframe <- data.frame(like.obj$x, like.obj$lx)
+    dframe <- data.frame(x=like.obj$x, lx=like.obj$lx)
     # Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=lx), size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
@@ -35,10 +35,10 @@ plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), xlabel="", ylabe
         # Plot intervals
         pl <- pl + geom_line(data=data.frame(int), aes(endpoints, like), size=0.3) 
         # Plot labels
-        labels <- data.frame(x=like.obj$x[like.obj$lx==max(like.obj$lx)], y=int$like, int=intervals[i])
+        labs <- data.frame(x=like.obj$x[like.obj$lx==max(like.obj$lx)], y=int$like, int=intervals[i])
         pl <- pl + geom_text(aes(x = x, y = y, 
             label = paste("1/",int,sep="")), 
-            data=labels, 
+            data=labs, 
             size = 3, 
             hjust = 0, 
             vjust = -1)
@@ -64,7 +64,7 @@ plot.error <- function(error.obj, y=NA, xlabel="", ylabel="Probability", main=""
         title=main) + ylab(ylabel) + xlab(xlabel)
     if (!is.null(error.obj$fail$px)) {
         dframe <- data.frame(error.obj$fail)
-        pl <- pl + geom_line(data=dframe, aes(y=px), size=0.3, linetype="dashed")
+        pl <- pl + geom_line(data=dframe, aes(y=px), size=0.6, linetype="dashed")
     }
     pl
 }
@@ -78,7 +78,7 @@ add.plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2)
     existing.plot
 }
 
-add.plot.error <- function(error, existing.plot, size=0.6) {
+add.plot.error <- function(error, existing.plot, size=0.3) {
     dframe <- data.frame(error$mislead)
     existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size)
     
@@ -86,6 +86,7 @@ add.plot.error <- function(error, existing.plot, size=0.6) {
         dframe <- data.frame(error$fail)
         existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size, linetype="dashed")
     }
+    existing.plot
 }
 
 

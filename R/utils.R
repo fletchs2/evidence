@@ -2,15 +2,15 @@
 # = Utility functions =
 # =====================
 
-rmaxer.2 <- function(y, expval)
+#' Finds integer value for negative binomial parameter r that maximizes
+#' the likelihood for fixed mean expval. Used in profile likelihood.
+#'
+#' Original code by Richard Royall May 1996.
+# 
+# @param y Observed data.
+# @param expval Expected value for negative binomial.
+rmax <- function(y, expval)
 {
-#	FUNCTION: "rmaxer.2"       May 20/96
-#  For sample y finds integer value of parameter "r"
-#  in negative binomial model with fixed mean
-#  (expval) that maximizes the likelihood, L(expval,r)
-#  (For use in profile likelihood) 
-#  Used in "negbinmean.lik" and "multipoisson.lik"
-#
 	z <- 10000000
 	newz <- 1000000
 	llikz <- sum(log(dnbinom(y, z, z/(z + expval)))
