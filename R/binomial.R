@@ -30,6 +30,8 @@ lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
     likelihood
 }
 
+# TODO Add probability of failing to find strong evidence to binomial model
+
 #' Probability of misleading evidence for binomial distribution
 #' 
 #' L(p)/L(trueprob) >= k

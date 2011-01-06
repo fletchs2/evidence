@@ -1,10 +1,10 @@
-Package: likely
+Package: evidence
 Version: 0.1
 Date: 2010-07-24
 Title: Likelihood Methods in R
-Author: Jeffrey D. Blume <j.blume@Vanderbilt.Edu>, Christopher J Fonnesbeck <chris.fonnesbeck@vadnerbilt.edu>, and Sarah Fletcher <sarah.fletcher@Vanderbilt.Edu>.
-Maintainer: Christopher J Fonnesbeck <chris.fonnesbeck@vadnerbilt.edu>
-Depends: R (>= 1.8.0), ggplot2, RUnit
+Author: Jeffrey D. Blume <j.blume@Vanderbilt.Edu>, Sarah Fletcher <sarah.fletcher@Vanderbilt.Edu> and Christopher J Fonnesbeck <chris.fonnesbeck@vanderbilt.edu>.
+Maintainer: Christopher J Fonnesbeck <chris.fonnesbeck@vanderbilt.edu>
+Depends: R (>= 1.8.0), ggplot2, testthat
 Suggests: maxLik
 Description: The evidential paradigm uses likelihood ratios to measure the strength of statistical evidence. Focused on interpreting data as statistical evidence, this package implements methods associated with using likelihoods and likelihood ratios to measure statistical evidence. 
 License: Artistic-2.0

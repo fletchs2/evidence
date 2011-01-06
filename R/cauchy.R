@@ -72,3 +72,5 @@ lcauchy <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
     likelihood$dist <- "Cauchy"
     likelihood
 }
+
+# TODO Add function for calculating probability of misleading or weak evidence

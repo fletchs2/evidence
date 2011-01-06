@@ -101,3 +101,5 @@ epois <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, k=8, robust=F, app
     class(error) <- "error"
     error
 }
+
+# TODO Add likelihood for ratio of Poisson means

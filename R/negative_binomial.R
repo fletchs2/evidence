@@ -68,3 +68,38 @@ lnbinom <- function(y, r=NA, lo=NA, hi=NA, robust=F, model="", scale=T)
     likelihood$dist <- "Negative binomial"
     likelihood
 }
+
+#' Probability of misleading evidence for negative binomial distribution
+#' 
+#' L(p)/L(trueprob) >= k
+#' 
+#' @param r Negative binomial r parameter.
+#' @param trueprob True probability of success.
+#' @param lo Lower parameter bound to likelihood calculation (defaults to 0).
+#' @param hi Upper parameter bound to likelihood calculation (defaults to 1).
+#' @param p.weak Calculates probability of failing to find strong evidence 
+#'      supporting trueprob.
+#' @keywords likelihood
+#' @export
+enbinom <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, p.weak=F) {
+    
+    if (!r > 0) stop("Parameter r must be positive in enbionom")
+    
+    z1 <- seq(lo+0.001, trueprob-0.001, by=1/points)
+    z2 <- seq(trueprob+0.001, hi-0.001, by=1/points)
+    z <- c(z1, trueprob, z2)
+    
+    mislead.hi <- pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
+    mislead.lo <- 1 - pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)) - 0.001), r, trueprob)
+    mislead <- c(mislead.lo, 0, mislead.hi)
+    
+    if (p.weak==T) {
+        fail.hi <- pnbinom(floor(( - log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob))) - 0.001, r, trueprob) -pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
+        fail.lo <- pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob))) - 0.001, r, trueprob) - pnbinom(( - log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)), r, trueprob)
+        fail <- c(fail.lo, 1, fail.hi)
+    } else fail <- NULL
+    
+    error <- list(mislead=list(x=z, px=mislead), fail=list(x=z, px=fail),true=trueprob, dist="Negative binomial")
+    class(error) <- "error"
+    error
+}
