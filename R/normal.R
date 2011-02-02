@@ -38,6 +38,7 @@ lnorm.mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE,
     if (estimated==T) {
         like <- -(n/2) * ((mean(y) - mu)^2)/((var(y) * (n - 1))/n)
     }
+    # Likelihood assuming sigma is known
     else if (!is.na(sigma)) {
         like <- -(n * (mean(y) - mu)^2)/(2 * sigma^2)
     }
@@ -96,13 +97,17 @@ lnorm.var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE,
 		hi <- ss/qchisq(0.001, n-1)
 	sig <- seq(lo, hi, length=lpoints)
 	
+	# Estimated likelihood
 	if (estimated==TRUE) {
-	    like <- log((ss/(n*sig)^(n/2)) - (ss/(n*sig) - 1) * n/2
+	    like <- log((ss/(n*sig))^(n/2)) - (ss/(n*sig) - 1) * n/2
 	}
+	# Profile likelihood
 	else if (profile==TRUE) {
 	    like <- log((ss/((n - 1)*sig))^(n/2)) - ss/(2*sig)
 	}
+	# Likelihood function
 	else {
+	    # Assuming mu is known
     	if (!is.na(mu)) {
     	    ss <- sum((y - mu)^2)
     	    like <- (1 + log(ss/(n*sig)) - ss/(n*sig))*n/2
