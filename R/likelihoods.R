@@ -17,11 +17,13 @@ interval.likelihood <- function(x, interval) {
 #' 
 #' @param like.obj likelihood A likelihood object
 #' @param y NA Not used
-plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), xlabel="", ylabel="Likelihood", main="") {
+plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), 
+    xlabel="", ylabel="Likelihood", main="", color="black", linetype=1, 
+    int.color=1, int.linetype="black") {
     # Create data frame
     dframe <- data.frame(x=like.obj$x, lx=like.obj$lx)
     # Plot likelihood curve
-    pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=lx), size=0.6)
+    pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=lx), color=color, size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
         panel.background=theme_rect(),
         panel.grid.major=theme_blank(),
@@ -33,9 +35,11 @@ plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), xlabel="", ylabe
         # Calculate intervals
         int <- interval(like.obj, intervals[i])
         # Plot intervals
-        pl <- pl + geom_line(data=data.frame(int), aes(endpoints, like), size=0.3) 
+        pl <- pl + geom_line(data=data.frame(int), 
+            aes(endpoints, like), color=int.color, linetype=int.linetype, size=0.3) 
         # Plot labels
-        labs <- data.frame(x=like.obj$x[like.obj$lx==max(like.obj$lx)], y=int$like, int=intervals[i])
+        labs <- data.frame(x=like.obj$x[like.obj$lx==max(like.obj$lx)], y=int$like, 
+            int=intervals[i])
         pl <- pl + geom_text(aes(x = x, y = y, 
             label = paste("1/",int,sep="")), 
             data=labs, 
@@ -74,7 +78,8 @@ add.plot <- function(x, plot, ...) { UseMethod("add.plot") }
 # Method for adding likelihood to existing plot
 add.plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2) {
     dframe <- data.frame(x=likelihood$x, lx=likelihood$lx)
-    existing.plot <- existing.plot + geom_line(data=dframe, aes(y=lx), size=size, linetype=linetype)
+    existing.plot <- existing.plot + geom_line(data=dframe, aes(y=lx), 
+        size=size, linetype=linetype)
     existing.plot
 }
 
@@ -84,7 +89,8 @@ add.plot.error <- function(error, existing.plot, size=0.3) {
     
     if (!is.null(error$fail$px)) {
         dframe <- data.frame(error$fail)
-        existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size, linetype="dashed")
+        existing.plot <- existing.plot 
+            + geom_line(data=dframe, aes(y=px), size=size, linetype="dashed")
     }
     existing.plot
 }
