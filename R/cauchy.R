@@ -68,8 +68,7 @@ lcauchy <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
     
     # Return likelihood object
     likelihood <- list(x=z, lx=like)
-    class(likelihood) <- "likelihood"
-    likelihood$dist <- "Cauchy"
+    class(likelihood) <- "likelihood" 
     likelihood
 }
 

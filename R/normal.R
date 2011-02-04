@@ -58,7 +58,7 @@ lnorm.mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE,
     # Return likelihood object
     likelihood <- list(x=mu, lx=exp(like))
     class(likelihood) <- "likelihood"
-    likelihood$dist <- "Normal"
+    likelihood$name <- "normal mean"
     likelihood
 }
 
@@ -121,14 +121,79 @@ lnorm.var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE,
 	
 	# Return likelihood object
     likelihood <- list(x=sig, lx=exp(like))
-    class(likelihood) <- "likelihood"
-    likelihood$dist <- "Normal"
+    class(likelihood) <- "likelihood" 
     likelihood
 }
 
-# TODO Implement probability of finding weak or misleading evidence for normal models
 
-# TODO Add likelihood for normal CV (NORM_CV.R)
+#' Probability of weak or misleading evidence for 
+#' mean of normal distribution
+#' 
+#' Misleading: Pr(L(mean+delta)/L(mean) >k ; mean)
+#' Weak: Pr(1/k< L(mean+delta)/L(mean < k ; mean)
+#' 
+#' @param mu Normal mean.
+#' @param sigma Normal standard deviation.
+#' @param hi Upper parameter bound to likelihood calculation.
+#' @param weak Calculates probability of failing to find strong evidence 
+#'      supporting mu.
+#' @keywords error normal
+#' @export
+
+enorm.mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
+    
+    if(is.na(hi)) {
+	    hi <- 10 * log(k)
+	}
+	y <- seq(0.001, hi, length = lpoints)
+
+    if (weak==T) {
+        bad <- pnorm(sqrt(y)/2 + log(k)/sqrt(y)) - 
+                pnorm(sqrt(y)/2 - log(k)/sqrt(y))
+    }
+    else {
+	    bad <- pnorm(-sqrt(y)/2 - log(k)/sqrt(y))
+    }
+    
+	# Return error object
+    error <- list(x=mean, px=bad)
+    class(error) <- "error"
+    error
+	
+}
+
+
+#' Normal likelihood for coefficient of variation
+#'
+#' For data (y), calculates profile likelihood for coefficient under
+#' iid Normal model.
+#' 
+#' @param y Observations.
+#' @param lo Lower parameter bound to likelihood calculation (Defaults to -10).
+#' @param hi Upper parameter bound to likelihood calculation (Defaults to 10).
+#' @param lpoints The number of evenly-spaced points in the interval over
+#' which to calculate profile likelihood (defaults to 1000).
+#' @param scale Flag for scaling maximum likelihood to 1 (defaults to TRUE.
+#' @return likelihood object.
+#' @keywords likelihood normal cv
+#' @export
+lnorm.cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
+    
+    z <- seq(lo, hi, length = lpoints)
+	n <- length(y)
+	s.hat <- (-mean(y)/z + sqrt((mean(y)/z)^2 + 4*mean(y^2)))/2
+	like <- -n*(log(shat) + 0.5*(mean(y^2)/(s.hat)^2 
+	    - (2*mean(y))/(z*s.hat) + (1/z)^2))
+	    
+	if (scale==T) {
+	    like <- like = max(like)
+	}
+
+	# Return likelihood object
+	likelihood <- list(x=z, lx=exp(like))
+    class(likelihood) <- "likelihood" 
+    likelihood
+}
 
 # TODO Implement likelihood for difference between normal means
 

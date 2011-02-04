@@ -25,12 +25,10 @@ lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
 
     # Instantiate likelihood object
     likelihood <- list(x=p, lx=like)
-    class(likelihood) <- "likelihood"
-    likelihood$dist <- "Binomial"
+    class(likelihood) <- "likelihood" 
     likelihood
 }
 
-# TODO Add probability of failing to find strong evidence to binomial model
 
 #' Probability of misleading evidence for binomial distribution
 #' 
@@ -40,37 +38,31 @@ lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
 #' @param trueprob True probability of success.
 #' @param lo Lower parameter bound to likelihood calculation (defaults to 0).
 #' @param hi Upper parameter bound to likelihood calculation (defaults to 1).
-#' @param p.fail Calculates probability of failing to find strong evidence 
+#' @param weak Calculates probability of failing to find strong evidence 
 #'      supporting trueprob.
 #' @keywords likelihood
 #' @export
-ebinom <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, p.fail=F) {
+ebinom <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     
     z <- seq(lo+0.001, hi-0.001, by=1/points)
     x <- 0:n
     
-    mislead <- numeric(length(z))
-    if (p.fail==T) {
-        fail <- numeric(length(z))
-    } else fail <- NULL
-    
+    bad <- numeric(length(z))
+        
     for (i in 1:length(z)) {
         
-        x.mis <- x[dbinom(x, n, z[i]) >= k*dbinom(x, n, trueprob)]
-        
-        mislead[i] <- ifelse(length(x.mis)==0, 0, sum(dbinom(x.mis, n, trueprob)))
         
         # Probability of failing to find strong evidence supporting trueprob
-        if (p.fail==T) {
-            
-            x.fail <- x[dbinom(x, n, z[i]) > dbinom(x, n, trueprob)/k]
-            
-            fail[i] <- ifelse(length(x.fail)==0, 0, sum(dbinom(x.fail, n, trueprob)))
+        if (weak==T) {
+            x.e <- x[dbinom(x, n, z[i]) > dbinom(x, n, trueprob)/k]
         }
+        else {
+            x.e <- x[dbinom(x, n, z[i]) >= k*dbinom(x, n, trueprob)]
+        }
+        bad[i] <- ifelse(length(x.e)==0, 0, sum(dbinom(x.e, n, trueprob)))
     }
     
-    error <- list(mislead=list(x=z, px=mislead), fail=list(x=z, px=fail),
-                true=trueprob, dist="Binomial")
+    error <- list(x=z, px=bad)
     class(error) <- "error"
     error
 }

@@ -33,8 +33,7 @@ lpois <- function(y, lo=NA, hi=NA, robust=F, scale=T)
     
     # Return likelihood object
     likelihood <- list(x=z, lx=exp(like))
-    class(likelihood) <- "likelihood"
-    likelihood$dist <- "Poisson"
+    class(likelihood) <- "likelihood" 
     likelihood
 }
 
@@ -52,7 +51,8 @@ lpois <- function(y, lo=NA, hi=NA, robust=F, scale=T)
 #' @param robust Flag for calculating robust correction (defaults to FALSE)
 #' @param p.fail Flag for calculating probability of failing to find strong  
 #'      evidence supporting trueprob (defaults to FALSE).
-epois <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, k=8, robust=F, approx=F, p.fail=F) {
+epois <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
+        k=8, robust=F, approx=F, weak=F) {
     
     # Set default bounds if none provided
     if(is.na(lo)) lo <- max(truemean - 10 * sqrt(truemean/n), 0.001)
@@ -97,7 +97,7 @@ epois <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, k=8, robust=F, app
         
     }
     
-    error <- list(mislead=list(x=mean, px=mislead), dist="Poisson")
+    error <- list(x=mean, px=mislead)
     class(error) <- "error"
     error
 }
