@@ -18,7 +18,7 @@
 #' @keywords likelihood normal
 #' @export
 
-lnorm.mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE, 
+lnorm_mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE, 
     estimated=F, scale=T) {
     
     n <- length(y)
@@ -85,7 +85,7 @@ lnorm.mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE,
 #' @keywords likelihood normal
 #' @export
 
-lnorm.var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE, 
+lnorm_var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE, 
     profile=FALSE, scale=TRUE) {
     
     n <- length(y)
@@ -142,7 +142,7 @@ lnorm.var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE,
 #' @keywords error normal
 #' @export
 
-enorm.mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
+enorm_mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
     
     if(is.na(hi)) {
 	    hi <- 10 * log(k)
@@ -181,7 +181,7 @@ enorm.mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm.cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
+lnorm_cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
     
     z <- seq(lo, hi, length = lpoints)
 	n <- length(y)
@@ -219,7 +219,7 @@ lnorm.cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm.diff <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=TRUE) {
+lnorm_diff <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=TRUE) {
     
     m <- length(x)
 	n <- length(y)
@@ -302,7 +302,7 @@ lnorm.diff <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=T
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm.ratio <- function(x, y, lo=0, hi=10, equal.var=TRUE, lpoints=1000, scale=TRUE) {
+lnorm_ratio <- function(x, y, lo=0, hi=10, equal.var=TRUE, lpoints=1000, scale=TRUE) {
     
     m <- length(x)
 	n <- length(y)

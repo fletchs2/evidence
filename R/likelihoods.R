@@ -73,17 +73,17 @@ plot.error <- function(error.obj, y=NA, xlabel="", ylabel="Probability", main=""
     pl
 }
 
-add.plot <- function(x, plot, ...) { UseMethod("add.plot") }
+add_plot <- function(x, plot, ...) { UseMethod("add_plot") }
 
 # Method for adding likelihood to existing plot
-add.plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2) {
+add_plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2) {
     dframe <- data.frame(x=likelihood$x, lx=likelihood$lx)
     existing.plot <- existing.plot + geom_line(data=dframe, aes(y=lx), 
         size=size, linetype=linetype)
     existing.plot
 }
 
-add.plot.error <- function(error, existing.plot, size=0.3) {
+add_plot.error <- function(error, existing.plot, size=0.3) {
     dframe <- data.frame(error$mislead)
     existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size)
     
