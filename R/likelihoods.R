@@ -19,7 +19,7 @@ interval.likelihood <- function(x, interval) {
 #' @param y NA Not used
 plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), 
     xlabel="", ylabel="Likelihood", main="", color="black", linetype=1, 
-    int.color=1, int.linetype="black") {
+    int.color="black", int.linetype=1) {
     # Create data frame
     dframe <- data.frame(x=like.obj$x, lx=like.obj$lx)
     # Plot likelihood curve
