@@ -1,1 +1,0 @@
-# TODO Implement beta-binomial model (see MULTIBIN.R)
