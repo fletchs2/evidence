@@ -12,7 +12,7 @@
 #' @return likelihood object.
 #' @keywords likelihood
 #' @export
-lpois <- function(y, lo=NA, hi=NA, robust=F, scale=T)
+poisson_like <- function(y, lo=NA, hi=NA, robust=F, scale=T)
 {
 
     # Set default bounds if none provided
@@ -51,7 +51,7 @@ lpois <- function(y, lo=NA, hi=NA, robust=F, scale=T)
 #' @param robust Flag for calculating robust correction (defaults to FALSE)
 #' @param p.fail Flag for calculating probability of failing to find strong  
 #'      evidence supporting trueprob (defaults to FALSE).
-epois <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
+poisson_wrong <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
         k=8, robust=F, approx=F, weak=F) {
     
     # Set default bounds if none provided

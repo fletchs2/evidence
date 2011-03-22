@@ -19,7 +19,7 @@
 #' @keywords likelihood lognormal
 #' @export
 
-llnorm <- function(y, varlog=NA, lo=NA, hi=NA, estimated=FALSE, 
+lognormal_like <- function(y, varlog=NA, lo=NA, hi=NA, estimated=FALSE, 
     normal=FALSE, lpoints=1000, scale=TRUE) {
     
     n <- length(y)

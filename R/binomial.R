@@ -13,7 +13,7 @@
 #' @return likelihood object.
 #' @keywords likelihood
 #' @export
-lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
+binomial_like <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
     
     # Range of parameter
     p <- seq(lo, hi, length=points)
@@ -42,7 +42,7 @@ lbinom <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
 #'      supporting trueprob.
 #' @keywords likelihood
 #' @export
-ebinom <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
+binomial_error <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     
     z <- seq(lo+0.001, hi-0.001, by=1/points)
     x <- 0:n

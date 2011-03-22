@@ -18,7 +18,7 @@
 #' @keywords likelihood normal
 #' @export
 
-lnorm_mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE, 
+normal_mean_like <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE, 
     estimated=F, scale=T) {
     
     n <- length(y)
@@ -85,7 +85,7 @@ lnorm_mean <- function(y, sigma=NA, lo=NA, hi=NA, lpoints=1000, profile=FALSE,
 #' @keywords likelihood normal
 #' @export
 
-lnorm_var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE, 
+normal_var_like <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE, 
     profile=FALSE, scale=TRUE) {
     
     n <- length(y)
@@ -142,7 +142,7 @@ lnorm_var <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALSE,
 #' @keywords error normal
 #' @export
 
-enorm_mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
+normal_mean_wrong <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
     
     if(is.na(hi)) {
 	    hi <- 10 * log(k)
@@ -181,7 +181,7 @@ enorm_mean <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm_cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
+normal_cv_like <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
     
     z <- seq(lo, hi, length = lpoints)
 	n <- length(y)
@@ -219,7 +219,7 @@ lnorm_cv <- function(y, lo=-10, hi=10, lpoints=1000, scale=TRUE) {
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm_diff <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=TRUE) {
+normal_diff_like <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=TRUE) {
     
     m <- length(x)
 	n <- length(y)
@@ -302,7 +302,7 @@ lnorm_diff <- function(x, y, lo=NA, hi=NA, equal.var=TRUE, lpoints=1000, scale=T
 #' @keywords likelihood normal cv
 #' @export
 
-lnorm_ratio <- function(x, y, lo=0, hi=10, equal.var=TRUE, lpoints=1000, scale=TRUE) {
+normal_ratio_like <- function(x, y, lo=0, hi=10, equal.var=TRUE, lpoints=1000, scale=TRUE) {
     
     m <- length(x)
 	n <- length(y)

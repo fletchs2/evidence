@@ -12,7 +12,7 @@
 #' @return likelihood object.
 #' @keywords likelihood
 #' @export
-lcauchy <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
+cauchy_like <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
 {
 
     # Set default bounds if none provided
@@ -23,7 +23,7 @@ lcauchy <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
     z <- seq(lo, hi, (hi - lo)/lpoints)
     
     llike <- numeric(length(z))
-	for(i in 1:length(z)) {
+	 for(i in 1:length(z)) {
 	    
 		scale <- quantile(abs(y - z[i]), 0.5)
 		step <- scale/10
@@ -71,5 +71,3 @@ lcauchy <- function(y, lo=NA, hi=NA, lpoints=1000, scale=T)
     class(likelihood) <- "likelihood" 
     likelihood
 }
-
-# TODO Add function for calculating probability of misleading or weak evidence
