@@ -1,3 +1,5 @@
+# TODO Add unit tests for all functions
+
 library(testthat)
 
 test_that("Poisson likelihood validation",

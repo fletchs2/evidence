@@ -139,10 +139,10 @@ normal_var_like <- function(y, mu=NA, lo=NA, hi=NA, lpoints=1000, estimated=FALS
 #' @param hi Upper parameter bound to likelihood calculation.
 #' @param weak Calculates probability of failing to find strong evidence 
 #'      supporting mu.
-#' @keywords error normal
+#' @keywords fail normal
 #' @export
 
-normal_mean_wrong <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
+normal_mean_fail <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
     
     if(is.na(hi)) {
 	    hi <- 10 * log(k)
@@ -157,11 +157,11 @@ normal_mean_wrong <- function(mu, sigma, k=8, hi=NA, lpoints=1000, weak=FALSE) {
 	    bad <- pnorm(-sqrt(n)/2 - log(k)/sqrt(n))
     }
     
-	# Return error object
-    error <- list(x=n, px=bad)
-    class(error) <- "error"
-    error$name <- "Sample size"
-    error
+	# Return fail object
+    fail <- list(x=n, px=bad)
+    class(fail) <- "fail"
+    fail$name <- "Sample size"
+    fail
 	
 }
 

@@ -52,11 +52,11 @@ plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32),
 
 #' Method for plotting probabilites of misleading evidence
 #' 
-#' @param error.obj error An error object
+#' @param fail.obj fail An fail object
 #' @param y NA Not used
-plot.error <- function(error.obj, y=NA, xlabel="", ylabel="Probability", main="") {
+plot.fail <- function(fail.obj, y=NA, xlabel="", ylabel="Probability", main="") {
     # Create data frame
-    dframe <- data.frame(error.obj$mislead)
+    dframe <- data.frame(fail.obj$mislead)
     # Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=px), size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
@@ -66,8 +66,8 @@ plot.error <- function(error.obj, y=NA, xlabel="", ylabel="Probability", main=""
         axis.text.x=theme_text(colour = "black", vjust = 1),
         axis.text.y=theme_text(colour = "black", hjust = 1),
         title=main) + ylab(ylabel) + xlab(xlabel)
-    if (!is.null(error.obj$fail$px)) {
-        dframe <- data.frame(error.obj$fail)
+    if (!is.null(fail.obj$fail$px)) {
+        dframe <- data.frame(fail.obj$fail)
         pl <- pl + geom_line(data=dframe, aes(y=px), size=0.6, linetype="dashed")
     }
     pl
@@ -83,12 +83,12 @@ add_plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2)
     existing.plot
 }
 
-add_plot.error <- function(error, existing.plot, size=0.3) {
-    dframe <- data.frame(error$mislead)
+add_plot.fail <- function(fail, existing.plot, size=0.3) {
+    dframe <- data.frame(fail$mislead)
     existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size)
     
-    if (!is.null(error$fail$px)) {
-        dframe <- data.frame(error$fail)
+    if (!is.null(fail$fail$px)) {
+        dframe <- data.frame(fail$fail)
         existing.plot <- existing.plot 
             + geom_line(data=dframe, aes(y=px), size=size, linetype="dashed")
     }

@@ -92,17 +92,17 @@ enbinom <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
         fail.hi <- pnbinom(floor(( - log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob))) - 0.001, r, trueprob) -pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
         fail.lo <- pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob))) - 0.001, r, trueprob) - pnbinom(( - log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)), r, trueprob)
         fail <- c(fail.lo, 1, fail.hi)
-        error <- list(x=z, px=fail)
+        fail <- list(x=z, px=fail)
 
     } else {
         mislead.hi <- pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
         mislead.lo <- 1 - pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)) - 0.001), r, trueprob)
         mislead <- c(mislead.lo, 0, mislead.hi)
-        error <- list(x=z, px=mislead)
+        fail <- list(x=z, px=mislead)
     }
     
-    class(error) <- "error"
-    error
+    class(fail) <- "fail"
+    fail
 }
 
 

@@ -18,10 +18,13 @@ poisson_like <- function(y, lo=NA, hi=NA, robust=F, scale=T)
     # Set default bounds if none provided
     if(is.na(lo)) lo <- mean(y) * max(1 - 4/sqrt(sum(y)), 1/4)
     if(is.na(hi)) hi <- mean(y) * (1 + 4/sqrt(sum(y)))
+    
     # Range of parameter
     z <- seq(lo, hi, (hi - lo)/1000)
+    
     # Calculate likelihood over range of z
     like <- sum(y) * log(z) - length(y) * z
+    
     # Correct for model failure
     if(robust == T) {
       like <- (like * (mean(y) * length(y)))/
@@ -37,7 +40,6 @@ poisson_like <- function(y, lo=NA, hi=NA, robust=F, scale=T)
     likelihood
 }
 
-# TODO Add probability of failing to find strong evidence to Poisson.
 
 #' Probability of misleading evidence for Poisson distribution
 #' 
@@ -51,7 +53,7 @@ poisson_like <- function(y, lo=NA, hi=NA, robust=F, scale=T)
 #' @param robust Flag for calculating robust correction (defaults to FALSE)
 #' @param p.fail Flag for calculating probability of failing to find strong  
 #'      evidence supporting trueprob (defaults to FALSE).
-poisson_wrong <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
+poisson_fail <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
         k=8, robust=F, approx=F, weak=F) {
     
     # Set default bounds if none provided
@@ -97,9 +99,63 @@ poisson_wrong <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA,
         
     }
     
-    error <- list(x=mean, px=mislead)
-    class(error) <- "error"
-    error
+    fail <- list(x=mean, px=mislead)
+    class(fail) <- "fail"
+    fail
 }
 
-# TODO Add likelihood for ratio of Poisson means
+
+#' Poisson profile likelihood for ratio of two means
+#'
+#' Calculates profile likelihood for the ratio of two
+#' iid Normal means (x,y). Variances can be assumed equal or unequal. Uses
+#' exponent (n-1)/2 instead of n/2 in profile likelihood for
+#' normal mean, as suggested by Kalbfleisch and Sprott(1971).
+#' 
+#' @param x First set of observations.
+#' @param y Second set of observations.
+#' @param lo Lower parameter bound to likelihood calculation.
+#' @param hi Upper parameter bound to likelihood calculation.
+#' @param lpoints The number of evenly-spaced points in the interval over
+#' which to calculate profile likelihood (defaults to 1000).
+#' @param robust Flag for returning robust adjusted likelihood.
+#' @param scale Flag for scaling maximum likelihood to 1 (defaults to TRUE.
+#' @return likelihood object.
+#' @keywords likelihood poisson mean
+#' @export
+poisson_ratio_like <- function(x, y, lo=NA, hi=NA, lpoints=1000, robust=FALSE, scale=TRUE) {
+    
+    # Set default bounds if none provided
+    if(is.na(lo)) lo <- 0
+    if(is.na(hi)) hi <- (2 * mean(y))/mean(x)
+    
+    # Range of parameter
+    z <- seq(lo, hi, length=1000)
+    
+    m <- length(x)
+	n <- length(y)
+	b <- m/(m + n * z)
+	
+	like <- sum(x) * log(b) + sum(y) * log(1 - b) 
+	    - max(sum(x) * log(b) + sum(y) * log(1 - b))
+    
+    if (robust==T) {
+        ratio <- mean(y)/mean(x)
+		adj <- (m * mean(y) + n * ratio^2 * mean(x)) / 
+		    ((m * var(y) * (n - 1))/n + (n * ratio^2 * var(x) * (m - 1))/m)
+    }
+    else {
+        adj <- 1
+    }
+    
+    if (scale==T) {
+        like <- like - max(like)
+    }
+    
+    # Return likelihood object
+    likelihood <- list(x=z, lx=exp(like)^adj)
+    class(likelihood) <- "likelihood" 
+    likelihood$name <- "Ratio of means"
+    likelihood
+    
+}
