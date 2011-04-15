@@ -1,6 +1,3 @@
-# TODO Add gamma likelihood and probability of finding weak or misleading evidence
-# TODO Add robust likelihood for gamma (GAMMAROB.R)
-
 #' Gamma likelihood
 #' 
 #' Original code by Richard Royall Oct 26 2000
