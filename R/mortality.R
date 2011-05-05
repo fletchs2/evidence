@@ -15,7 +15,7 @@
 #' @return likelihood object.
 #' @keywords likelihood mortality ratio poisson
 #' @export
-odds_like <- function(obs_deaths, exp_deaths, lo=0.1, hi=5, points=1000, scale=T) {
+smr_like <- function(obs_deaths, exp_deaths, lo=0.1, hi=5, points=1000, scale=T) {
     
     # Range of ratio
     z <- seq(lo, hi, length=points)
@@ -53,7 +53,7 @@ odds_like <- function(obs_deaths, exp_deaths, lo=0.1, hi=5, points=1000, scale=T
 #' @return likelihood object.
 #' @keywords likelihood mortality ratio poisson
 #' @export
-odds_like <- function(obs1, exp1, obs2, exp2, lo=0.1, hi=5, points=1000, scale=T) {
+smr_ratio_like <- function(obs1, exp1, obs2, exp2, lo=0.1, hi=5, points=1000, scale=T) {
     
     # Range of ratio
     z <- seq(lo, hi, length=points)
@@ -70,4 +70,27 @@ odds_like <- function(obs1, exp1, obs2, exp2, lo=0.1, hi=5, points=1000, scale=T
     likelihood <- list(x=z, lx=exp(like))
     class(likelihood) <- "likelihood" 
     likelihood
+}
+
+
+#' Ratio of hazard rates likelihood
+#'
+#' Calculates likelihood function for ratio of hazard rates
+#' 
+#' @param events1 Observed number of events, population 1.
+#' @param time1 Exposure (e.g. person-years), population 1.
+#' @param events2 Observed number of events, population 2.
+#' @param time2 Exposure (e.g. person-years), population 2.
+#' @param lo Lower parameter bound to likelihood calculation (defaults to 0.1).
+#' @param hi Upper parameter bound to likelihood calculation (defaults to 5).
+#' @param points Number of points in [0,1] to calculate likelihood 
+#'      (defaults to 1000).
+#' @param scale Flag for scaling maximum likelihood to 1 (defaults to TRUE).
+#' @return likelihood object.
+#' @keywords likelihood hazard ratio 
+#' @export
+hazard_like <- function(events1, time1, events2, time2, lo=0.1, hi=5, points=1000, scale=T) {
+    
+    # Same calculation as for ratio of mortality rates
+    smr_ratio_like(events1, time1, events2, time2, lo=lo, hi=hi, points=points, scale=scale)
 }
