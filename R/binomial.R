@@ -13,18 +13,18 @@
 #' @return likelihood object.
 #' @keywords likelihood
 #' @export
-binomial_like <- function(n, y, lo=0, hi=1, points=1000, scale=T) {
+binomial_like <- function(n, y, lo=0.001, hi=0.999, points=1000, scale=T) {
     
     # Range of parameter
     p <- seq(lo, hi, length=points)
     # Calculate likelihood over range of p
-    like <- exp(y*log(p) + (n-y) * log(1 - p))
+    like <- sum(y)*log(p) + sum(n-y) * log(1 - p)
     if (scale==T) {
-        like <- like/max(like)
+        like <- like - max(like)
     }
 
     # Instantiate likelihood object
-    likelihood <- list(x=p, lx=like)
+    likelihood <- list(x=p, lx=exp(like))
     class(likelihood) <- "likelihood" 
     likelihood
 }

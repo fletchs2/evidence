@@ -80,7 +80,7 @@ nbinomial_like <- function(y, r=NA, lo=NA, hi=NA, robust=F, model="", scale=T)
 #'      supporting trueprob.
 #' @keywords likelihood
 #' @export
-enbinom <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
+nbinom_fail <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     
     if (!r > 0) stop("Parameter r must be positive in enbionom")
     
