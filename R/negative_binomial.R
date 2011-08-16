@@ -80,7 +80,7 @@ nbinomial_like <- function(y, r=NA, lo=NA, hi=NA, robust=F, model="", scale=T)
 #'      supporting trueprob.
 #' @keywords likelihood
 #' @export
-nbinom_fail <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
+nbinom_mis <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     
     if (!r > 0) stop("Parameter r must be positive in enbionom")
     
@@ -89,20 +89,20 @@ nbinom_fail <- function(r, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     z <- c(z1, trueprob, z2)
     
     if (weak==T) {
-        fail.hi <- pnbinom(floor(( - log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob))) - 0.001, r, trueprob) -pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
-        fail.lo <- pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob))) - 0.001, r, trueprob) - pnbinom(( - log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)), r, trueprob)
-        fail <- c(fail.lo, 1, fail.hi)
-        fail <- list(x=z, px=fail)
+        pmis.hi <- pnbinom(floor(( - log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob))) - 0.001, r, trueprob) -pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
+        pmis.lo <- pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob))) - 0.001, r, trueprob) - pnbinom(( - log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)), r, trueprob)
+        pmis <- c(pmis.lo, 1, pmis.hi)
+        pmis <- list(x=z, px=pmis)
 
     } else {
         mislead.hi <- pnbinom((log(k) - r * log(z2/trueprob))/log((1 - z2)/(1 - trueprob)), r, trueprob)
         mislead.lo <- 1 - pnbinom(floor((log(k) - r * log(z1/trueprob))/log((1 - z1)/(1 - trueprob)) - 0.001), r, trueprob)
         mislead <- c(mislead.lo, 0, mislead.hi)
-        fail <- list(x=z, px=mislead)
+        pmis <- list(x=z, px=mislead)
     }
     
-    class(fail) <- "fail"
-    fail
+    class(pmis) <- "pmis"
+    pmis
 }
 
 

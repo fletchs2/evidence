@@ -51,9 +51,9 @@ poisson_like <- function(y, lo=NA, hi=NA, robust=F, scale=T)
 #' @param lo Lower parameter bound to likelihood calculation (optional).
 #' @param hi Upper parameter bound to likelihood calculation (optional).
 #' @param robust Flag for calculating robust correction (defaults to FALSE)
-#' @param p.fail Flag for calculating probability of failing to find strong  
+#' @param p.pmis Flag for calculating probability of failing to find strong  
 #'      evidence supporting trueprob (defaults to FALSE).
-poisson_fail <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
+poisson_pmis <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA, 
         k=8, robust=F, approx=F, weak=F) {
     
     # Set default bounds if none provided
@@ -99,9 +99,9 @@ poisson_fail <- function(n, truemean, truevar=F, r=NA, lo=NA, hi=NA,
         
     }
     
-    fail <- list(x=mean, px=mislead)
-    class(fail) <- "fail"
-    fail
+    pmis <- list(x=mean, px=mislead)
+    class(pmis) <- "pmis"
+    pmis
 }
 
 

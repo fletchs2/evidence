@@ -15,13 +15,13 @@ interval.likelihood <- function(x, interval) {
 
 #' Method for plotting likelihood
 #' 
-#' @param like.obj likelihood A likelihood object
+#' @param like_obj likelihood A likelihood object
 #' @param y NA Not used
-plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32), 
+plot.likelihood <- function(like_obj, y=NA, intervals=c(8, 32), 
     xlabel="", ylabel="Likelihood", main="", color="black", linetype=1, 
     int.color="black", int.linetype=1) {
     # Create data frame
-    dframe <- data.frame(x=like.obj$x, lx=like.obj$lx)
+    dframe <- data.frame(x=like_obj$x, lx=like_obj$lx)
     # Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=lx), color=color, size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
@@ -33,12 +33,12 @@ plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32),
         title=main) + ylab(ylabel) + xlab(xlabel)
     for (i in 1:length(intervals)) {
         # Calculate intervals
-        int <- interval(like.obj, intervals[i])
+        int <- interval(like_obj, intervals[i])
         # Plot intervals
         pl <- pl + geom_line(data=data.frame(int), 
             aes(endpoints, like), color=int.color, linetype=int.linetype, size=0.3) 
         # Plot labels
-        labs <- data.frame(x=like.obj$x[like.obj$lx==max(like.obj$lx)], y=int$like, 
+        labs <- data.frame(x=like_obj$x[like_obj$lx==max(like_obj$lx)], y=int$like, 
             int=intervals[i])
         pl <- pl + geom_text(aes(x = x, y = y, 
             label = paste("1/",int,sep="")), 
@@ -52,11 +52,11 @@ plot.likelihood <- function(like.obj, y=NA, intervals=c(8, 32),
 
 #' Method for plotting probabilites of misleading evidence
 #' 
-#' @param fail.obj fail An fail object
+#' @param pmis_obj pmis An pmis object
 #' @param y NA Not used
-plot.fail <- function(fail.obj, y=NA, xlabel="", ylabel="Probability", main="") {
+plot.pmis <- function(pmis_obj, y=NA, xlabel="", ylabel="Probability", main="") {
     # Create data frame
-    dframe <- data.frame(fail.obj$mislead)
+    dframe <- data.frame(x=pmis_obj$x, px=pmis_obj$px)
     # Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=px), size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
@@ -66,8 +66,8 @@ plot.fail <- function(fail.obj, y=NA, xlabel="", ylabel="Probability", main="") 
         axis.text.x=theme_text(colour = "black", vjust = 1),
         axis.text.y=theme_text(colour = "black", hjust = 1),
         title=main) + ylab(ylabel) + xlab(xlabel)
-    if (!is.null(fail.obj$fail$px)) {
-        dframe <- data.frame(fail.obj$fail)
+    if (!is.null(pmis_obj$pmis$px)) {
+        dframe <- data.frame(pmis_obj$pmis)
         pl <- pl + geom_line(data=dframe, aes(y=px), size=0.6, linetype="dashed")
     }
     pl
@@ -83,12 +83,12 @@ add_plot.likelihood <- function(likelihood, existing.plot, size=0.6, linetype=2)
     existing.plot
 }
 
-add_plot.fail <- function(fail, existing.plot, size=0.3) {
-    dframe <- data.frame(fail$mislead)
+add_plot.pmis <- function(pmis, existing.plot, size=0.3) {
+    dframe <- data.frame(pmis$mislead)
     existing.plot <- existing.plot + geom_line(data=dframe, aes(y=px), size=size)
     
-    if (!is.null(fail$fail$px)) {
-        dframe <- data.frame(fail$fail)
+    if (!is.null(pmis$pmis$px)) {
+        dframe <- data.frame(pmis$pmis)
         existing.plot <- existing.plot 
             + geom_line(data=dframe, aes(y=px), size=size, linetype="dashed")
     }

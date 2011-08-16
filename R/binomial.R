@@ -42,7 +42,7 @@ binomial_like <- function(n, y, lo=0.001, hi=0.999, points=1000, scale=T) {
 #'      supporting trueprob.
 #' @keywords likelihood
 #' @export
-binomial_fail <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
+binomial_pmis <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
     
     z <- seq(lo+0.001, hi-0.001, by=1/points)
     x <- 0:n
@@ -62,7 +62,7 @@ binomial_fail <- function(n, trueprob, lo=0, hi=1, k=8, points=1000, weak=F) {
         bad[i] <- ifelse(length(x.e)==0, 0, sum(dbinom(x.e, n, trueprob)))
     }
     
-    fail <- list(x=z, px=bad)
-    class(fail) <- "fail"
-    fail
+    pmis <- list(x=z, px=bad)
+    class(pmis) <- "pmis"
+    pmis
 }
