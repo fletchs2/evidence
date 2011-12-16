@@ -13,6 +13,16 @@ interval.likelihood <- function(x, interval) {
     list(endpoints=c(min(interval.points), max(interval.points)), like=maxlike/interval)
 }
 
+interpolate.likelihood <- function(like_obj) {
+	interpolate_points <- (approx(like_obj$x, like_obj$lx[,1], n=10000))
+	z <- interpolate_points$x
+	like <- interpolate_points$y
+	LR <- like_obj$LR
+    likelihood <- list(x=z, lx=like, LR=LR)
+    class(likelihood) <- "likelihood" 
+    likelihood
+}
+
 #' Method for plotting likelihood
 #' 
 #' @param like_obj likelihood A likelihood object
@@ -22,6 +32,8 @@ plot.likelihood <- function(like_obj, y=NA, intervals=c(8, 32),
     int.color="black", int.linetype=1) {
     # Create data frame
     dframe <- data.frame(x=like_obj$x, lx=like_obj$lx)
+    
+
     # Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=lx), color=color, size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
@@ -31,9 +43,12 @@ plot.likelihood <- function(like_obj, y=NA, intervals=c(8, 32),
         axis.text.x=theme_text(colour = "black", vjust = 1),
         axis.text.y=theme_text(colour = "black", hjust = 1),
         title=main) + ylab(ylabel) + xlab(xlabel)
+    
+    
     for (i in 1:length(intervals)) {
         # Calculate intervals
-        int <- interval(like_obj, intervals[i])
+        if(length(like_obj$x) < 1000) int <- interval(interpolate.likelihood(like_obj), intervals[i])
+        else int <- interval(like_obj, intervals[i]) 
         # Plot intervals
         pl <- pl + geom_line(data=data.frame(int), 
             aes(endpoints, like), color=int.color, linetype=int.linetype, size=0.3) 
@@ -57,7 +72,7 @@ plot.likelihood <- function(like_obj, y=NA, intervals=c(8, 32),
 plot.pmis <- function(pmis_obj, y=NA, xlabel="", ylabel="Probability", main="") {
     # Create data frame
     dframe <- data.frame(x=pmis_obj$x, px=pmis_obj$px)
-    # Plot likelihood curve
+    #Plot likelihood curve
     pl <- ggplot(dframe, aes(x)) + geom_line(aes(y=px), size=0.6)
     pl <- pl + opts(axis.line=theme_blank(), 
         panel.background=theme_rect(),
